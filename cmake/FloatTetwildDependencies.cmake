@@ -49,6 +49,8 @@ if(NOT TARGET igl::core)
 endif()
 
 # Geogram
+# Include our custom geogram.cmake first to create the target
+include(geogram)
 if(NOT TARGET geogram::geogram)
 	float_tetwild_download_geogram()
 	include(geogram)
