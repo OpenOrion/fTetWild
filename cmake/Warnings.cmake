@@ -14,6 +14,9 @@ set(MY_FLAGS
 		-Wextra
 		-pedantic
 
+		-fsigned-char 
+		-Wno-maybe-uninitialized
+
 		# -Wconversion
 		#-Wunsafe-loop-optimizations # broken with C++11 loops
 		-Wunused
@@ -50,16 +53,16 @@ set(MY_FLAGS
 		# -Wno-sign-conversion
 		#-Wsign-conversion
 
-		-Wshadow
+		# -Wshadow  # Disabled - causes issues with parameter names shadowing members in third-party code
 
 		-Wstrict-null-sentinel
 		-Woverloaded-virtual
-		-Wsign-promo
+		# -Wsign-promo  # Disabled - causes issues with third-party libraries like fmt
 		-Wstack-protector
 		-Wstrict-aliasing
 		-Wstrict-aliasing=2
-		-Wswitch-default
-		-Wswitch-enum
+		# -Wswitch-default  # Disabled - third-party libraries may not have default cases
+		# -Wswitch-enum     # Disabled - third-party libraries may not handle all enum values
 		-Wswitch-unreachable
 
 		-Wcast-align
@@ -72,9 +75,9 @@ set(MY_FLAGS
 		-Wstrict-overflow
 		-Wstrict-overflow=2
 
-		-Wctor-dtor-privacy
+		# -Wctor-dtor-privacy  # Disabled - causes issues with template classes in third-party libraries
 		-Wlogical-op
-		-Wnoexcept
+		# -Wnoexcept          # Disabled - causes issues with STL type traits and lambdas
 		-Woverloaded-virtual
 		# -Wundef
 
@@ -84,6 +87,9 @@ set(MY_FLAGS
 		-Werror=delete-non-virtual-dtor
 
 		-Wno-sign-compare
+		
+		# Disable deprecation warnings for geogram API compatibility
+		-Wno-deprecated-declarations
 
 		###########
 		# GCC 6.1 #

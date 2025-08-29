@@ -23,17 +23,20 @@ message(STATUS "Found Geogram here: ${GEOGRAM_ROOT}")
 
 ################################################################################
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	set(VORPALINE_ARCH_64 TRUE CACHE BOOL "" FORCE)
-	set(VORPALINE_PLATFORM Win-vs-generic CACHE STRING "" FORCE)
-	set(VORPALINE_BUILD_DYNAMIC false CACHE STRING "" FORCE)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	set(VORPALINE_PLATFORM Linux64-gcc CACHE STRING "" FORCE)
-	set(VORPALINE_BUILD_DYNAMIC false CACHE STRING "" FORCE)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set(VORPALINE_PLATFORM Darwin-clang CACHE STRING "" FORCE)
-	set(VORPALINE_BUILD_DYNAMIC false CACHE STRING "" FORCE)
+# Let geogram auto-detect the platform (includes ARM64 support)
+# Override only if not set, to allow geogram's smart detection
+if(NOT VORPALINE_PLATFORM)
+	if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+		set(VORPALINE_ARCH_64 TRUE CACHE BOOL "" FORCE)
+		set(VORPALINE_PLATFORM Win-vs-generic CACHE STRING "" FORCE)
+	else()
+		# Include geogram's platform detection for automatic ARM64 support
+		include(${GEOGRAM_ROOT}/cmake/geo_detect_platform.cmake)
+	endif()
 endif()
+
+# Set build type to static (non-dynamic) for all platforms
+set(VORPALINE_BUILD_DYNAMIC false CACHE STRING "" FORCE)
 
 option(GEOGRAM_WITH_GRAPHICS "Viewers and geogram_gfx library" OFF)
 option(GEOGRAM_WITH_LEGACY_NUMERICS "Legacy numerical libraries" OFF)
